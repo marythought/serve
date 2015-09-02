@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+#
+# example:
+#  serve public 4001
+#
+# Spin up a quick web server for files in the specified directory (first arg)
+# on the port number given (second arg).
+#
+
+require "webrick"
+
+WEBrick::Utils.su 'www'
+# _www:*:70:70:World Wide Web Server:/Library/WebServer:/usr/bin/false
+# requires a start with sudo 'sudo serve'
+
+s = WEBrick::HTTPServer.new(
+  :DocumentRoot => (ARGV[0] || Dir.pwd),
+  :Port => (ARGV[1] || 4000)
+  )
+
+trap('INT') { s.shutdown }
+
+puts `ruby -v`
+
+s.start
+
